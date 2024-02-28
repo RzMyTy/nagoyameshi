@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>NAGOYAMESHI</title>
+		
+		<link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css">
+		<link rel="stylesheet" type="text/css" href="css/6-1-7.css">
+	</head>
+	<body>
+		<div class="nagoyameshi-wrapper">
+			
+			<div th:replace="~{fragment :: header}"></div>
+			
+			<main>
+				<div class="container pt-4 nagoyameshi-container">
+					<div th:if="${param.loggedIn}" class="alert alert-info">
+						ログインしました。
+					</div>
+					
+					<div th:if="${param.loggedOut}" class="alert alert-info">
+						ログアウトしました。
+					</div>
+					
+					<div th:if="${successMessage}" class="alert alert-info">
+						 <span th:text="${successMessage}"></span>
+					</div>
+				</div>
+				
+				<h1 class="text-center"><font face="sans-serif;">名古屋市のB級グルメサイト</font></h1>
+				
+				<div class="d-flex justify-content-center nagoyameshi-1">                                            
+                    <form method="get" th:action="@{/restaurants}" class="mb-5 nagoyameshi-search-form">
+                         <div class="input-group">
+                             <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="店舗名から探す">
+                             <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button> 
+                         </div>
+                    </form>
+                 </div>
+				
+				<ul class="slider">
+					 <li><img th:src="@{/images/sample1.jpg}" alt=""></li>
+					 <li><img th:src="@{/images/sample2.jpg}" alt=""></li>
+					 <li><img th:src="@{/images/sample3.jpg}" alt=""></li>
+					 <li><img th:src="@{/images/sample4.jpg}" alt=""></li>
+				</ul>
+				
+				<h2 class="text-center mb-3">新着</h2>
+				
+				<div class="row row-cols-lg-5 g-3 mb-5 nagoyameshi-pad">
+					<div class="col" th:each="newRestaurant : ${newRestaurants}">
+						<a th:href="@{/restaurants/__${newRestaurant.getId()}__}" class="link-dark nagoyameshi-card-link">
+							<div class="card h-100">
+								<img th:if="${newRestaurant.getImage()}" th:src="@{/storage/__${newRestaurant.getImage()}__}" class="card-img-top nagoyameshi-vertical-card-image" alt="店舗画像">
+								<img th:unless="${newRestaurant.getImage()}" th:src="@{/images/noImage.png}" class="card-img-top nagoyameshi-vertical-card-image" alt="NO IMAGE">
+								<div class="card-body">
+									<h3 class="card-title" th:text="${newRestaurant.getName()}"></h3>
+									<p class="card-text mb-1">
+										<small class="text-muted" th:text="${newRestaurant.getAddress()}"></small>
+									</p>
+									<p class="card-text">
+										<span th:text="${#numbers.formatInteger(newRestaurant.getLowestPrice(), 1, 'COMMA') + '円 '} + '～' + ${#numbers.formatInteger(newRestaurant.getHighestPrice(), 1, 'COMMA') + '円 '}" ></span> 
+									</p>
+								</div>
+							</div>
+						</a>
+					</div>
+				</div>
+				
+		        <h2 class="mb-3 text-center">カテゴリから探す</h2>
+		        <div class="row row-cols-lg-5 g-3 mb-5 nagoyameshi-pad h-100">
+		            <div class="col">
+		                <a th:href="@{/restaurants?categoryType=12}" class="card-link">
+		                    <div class="card text-white">
+		                        <img th:src="@{/images/izakaya.jpg}" class="card-img vertical-card-image" alt="">
+		                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+		                            <h3 class="card-title category-name">居酒屋</h5>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div> 
+		
+		            <div class="col">
+		                <a th:href="@{/restaurants?categoryType=13}" class="card-link">
+		                    <div class="card text-white">
+		                        <img th:src="@{/images/sushi.jpg}" class="card-img vertical-card-image" alt="">
+		                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+		                            <h3 class="card-title category-name">寿司</h5>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div>    
+		            
+		            <div class="col">
+		                <a th:href="@{/restaurants?categoryType=20}" class="card-link">
+		                    <div class="card text-white">
+		                        <img th:src="@{/images/yakiniku.jpg}" class="card-img vertical-card-image" alt="">
+		                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+		                            <h3 class="card-title category-name">焼肉</h5>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div> 
+		            
+		            <div class="col">
+		                <a th:href="@{/restaurants?categoryType=14}" class="card-link">
+		                    <div class="card text-white">
+		                        <img th:src="@{/images/ramen.jpg}" class="card-img vertical-card-image" alt="">
+		                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+		                            <h3 class="card-title category-name">ラーメン</h5>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div> 
+		            
+		            <div class="col">
+		                <a th:href="@{/restaurants?categoryType=2}" class="card-link">
+		                    <div class="card text-white">
+		                        <img th:src="@{/images/italian.jpg}" class="card-img vertical-card-image" alt="">
+		                        <div class="card-img-overlay d-flex justify-content-center align-items-center overlay-background">
+		                            <h3 class="card-title category-name">イタリアン</h5>
+		                        </div>
+		                    </div>
+		                </a>
+		            </div>  
+		        </div>
+			</main>
+			
+			<div th:replace="~{fragment :: footer}"></div>
+		</div>
+		
+		<div th:replace="~{fragment :: scripts}"></div>
+		
+		<script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+		<script src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+		<!--自作のJS-->
+		<script th:src="@{/js/sample.js}"></script>
+	</body>
+</html>

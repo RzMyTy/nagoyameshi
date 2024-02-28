@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment ::meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>レビュー更新</title>
+	</head>
+	<body>
+		<div class="nagoyameshi-wrapper">
+			
+			<div th:replace="~{fragment :: header}"></div>
+			
+			<main>
+				<div class="cantainer pt-4 pb-5 magoyameshi-container">
+					<div class="row justify-content-center">
+						<div class="col-xl-5 col-lg-6 col-md-8">
+							<nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+								<ol class="breadcrumb mb-0">
+									<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+									<li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
+									<li class="breadcrumb-item active" aria-current="page">店舗詳細</li>
+								</ol>
+							</nav>
+							
+							<h1 class="mb-4 text-center">レビュー更新</h1>
+							
+							<h2 class="mb-4 text-center" th:text="${restaurant.getName()}"></h2>
+							
+							<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/review/__${review.getId()}__/update}" th:object="${reviewEditForm}">
+								<input type="hidden" th:field="*{id}">
+								
+								<div class="form-group justify-content-center my-4">
+									<div class="col-md-4">
+										<label for="name" class="form-label text-md-left fw-bold">評価</label>
+									</div>
+ 									<div class="col-md-4">                                    
+                                         <div name="score" th:if="${#fields.hasErrors('score')}" class="form-select" th:errors="*{score}"></div>                                    
+                                         <select class="form-select text-warning" th:field="*{score}">
+                                             <option value="5" class="text-warning">★★★★★</option>
+				                             <option value="4" class="text-warning">★★★★</option>
+				                             <option value="3" class="text-warning">★★★</option>
+				                             <option value="2" class="text-warning">★★</option>
+				                             <option value="1" class="text-warning">★</option>                                                                                                                                                                       
+                                         </select>
+                                     </div>
+									
+									 <div class="mb-4">
+				                       <label for="comment" class="form-label text-md-left fw-bold">コメント</label>
+				                     <div>
+				                        <textarea class="form-control" id="content" name="content" cols="30" rows="5" th:text="*{content}"></textarea>                            
+				                     </div>
+				                   </div>                                                             
+							    </div>
+								<div class="form-group d-flex justify-content-center my-4">
+	                                  <button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">更新</button>
+	                            </div>
+	                            
+	                            <div th:if="${successMessage}" class="alert alert-info">
+	                                 <span th:text="${successMessage}"></span>
+	                            </div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</main>
+			
+			<div thw:replace="~{fragment :: footer}"></div>
+		</div>
+		
+		<div th:replacer="~{fragment :: scripts}"></div>
+	</body>
+</html>
